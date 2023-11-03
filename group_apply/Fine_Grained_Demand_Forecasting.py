@@ -1,9 +1,4 @@
 # Databricks notebook source
-# MAGIC %md 
-# MAGIC You may find this series of notebooks at https://github.com/databricks-industry-solutions/parts-demand-forecasting. For more information about this solution accelerator, visit https://www.databricks.com/solutions/accelerators/demand-forecasting.
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC # Fine Grained Demand Forecasting
 
@@ -131,81 +126,6 @@ score_exo = exo_df.iloc[~np.array(is_history)]
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### Try the Holt’s Winters Seasonal Method - Exponantial Smoothing
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC The Holt's Winters Seasonal method models seasonal and trend components. Fit it to the time series and its irregular components in the training period but not in the forecasting horizon. This model does not do a good job for forecasting the Christmas effect or the recovery period after the pandemic started. 
-
-# COMMAND ----------
-
-fit1 = ExponentialSmoothing(
-    train,
-    seasonal_periods=3,
-    trend="add",
-    seasonal="add",
-    use_boxcox=True,
-    initialization_method="estimated",
-).fit(method="ls")
-
-fcast1 = fit1.forecast(forecast_horizon).rename("Additive trend and additive seasonal")
-
-fit2 = ExponentialSmoothing(
-    train,
-    seasonal_periods=4,
-    trend="add",
-    seasonal="mul",
-    use_boxcox=True,
-    initialization_method="estimated",
-).fit(method="ls")
-
-fcast2 = fit2.forecast(forecast_horizon).rename("Additive trend and multiplicative seasonal")
-
-fit3 = ExponentialSmoothing(
-    train,
-    seasonal_periods=4,
-    trend="add",
-    seasonal="add",
-    damped_trend=True,
-    use_boxcox=True,
-    initialization_method="estimated",
-).fit(method="ls")
-
-fcast3 = fit3.forecast(forecast_horizon).rename("Additive damped trend and additive seasonal")
-
-fit4 = ExponentialSmoothing(
-    train,
-    seasonal_periods=4,
-    trend="add",
-    seasonal="mul",
-    damped_trend=True,
-    use_boxcox=True,
-    initialization_method="estimated",
-).fit(method="ls")
-
-
-fcast4 = fit4.forecast(forecast_horizon).rename("Additive damped trend and multiplicative seasonal")
-
-plt.figure(figsize=(12, 8))
-(line0,) =  plt.plot(series_df, marker="o", color="black")
-plt.plot(fit1.fittedvalues, color="blue")
-(line1,) = plt.plot(fcast1, marker="o", color="blue")
-plt.plot(fit2.fittedvalues, color="red")
-(line2,) = plt.plot(fcast2, marker="o", color="red")
-plt.plot(fit3.fittedvalues, color="green")
-(line3,) = plt.plot(fcast3, marker="o", color="green")
-plt.plot(fit4.fittedvalues, color="orange")
-(line4,) = plt.plot(fcast4, marker="o", color="orange")
-plt.axvline(x = min(score.index.values), color = 'red', label = 'axvline - full height')
-plt.legend([line0, line1, line2, line3, line4], ["Actuals", fcast1.name, fcast2.name, fcast3.name, fcast4.name])
-plt.xlabel("Time")
-plt.ylabel("Demand")
-plt.title("Holts Winters Seasonal Method")
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ### Try the SARIMAX method
 
 # COMMAND ----------
@@ -239,7 +159,7 @@ plt.plot(fcast2[10:], color="green")
 (line2,) = plt.plot(fcast2[10:], marker="o", color="green")
 
 plt.axvline(x = min(score.index.values), color = 'red', label = 'axvline - full height')
-plt.legend([line0, line1, line2], ["Actuals", fcast1.name, fcast2.name])
+plt.legend([line1, line2], ["Actuals", fcast1.name, fcast2.name])
 plt.xlabel("Time")
 plt.ylabel("Demand")
 plt.title("SARIMAX")
