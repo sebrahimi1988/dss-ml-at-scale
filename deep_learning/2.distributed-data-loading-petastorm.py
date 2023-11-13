@@ -6,7 +6,7 @@
 # MAGIC
 # MAGIC This example shows how to use Petastorm  with TorchDistributor to train on `imagenet` data with Pytorch Lightning. 
 # MAGIC
-# MAGIC ![alt text](../Pytorch-data-loading.png)
+# MAGIC ![alt text](https://github.com/sebrahimi1988/dss-ml-at-scale/blob/main/deep_learning/Pytorch-data-loading.png?raw=true)
 # MAGIC
 # MAGIC ## Requirements
 # MAGIC - Databricks Runtime ML 13.0 and above
